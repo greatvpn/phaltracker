@@ -6,6 +6,10 @@ class ControllerBase extends Controller
     public function initialize()
     {
         $user=$this->di->get('current_user');
+        if(!$user->id){
+          header("location: /login.php");
+          exit;
+        }
         $user_for_view=new stdClass();
         $user_for_view->id=$user->id;
         $user_for_view->name=$user->username;

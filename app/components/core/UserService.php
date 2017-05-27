@@ -18,7 +18,8 @@ class UserService
     {
         $di = Di::getDefault();
         if (empty ($_COOKIE ["c_secure_pass"]) || empty ($_COOKIE ["c_secure_uid"]) || empty ($_COOKIE ["c_secure_login"])) {
-            return;
+          $di->set('current_user', self::getUnLoginUser());
+          return;
         }
         $b_id = base64_decode($_COOKIE ["c_secure_uid"]);
         $id = 0 + $b_id;
@@ -44,8 +45,8 @@ class UserService
             $passkey = md5($user->username . date("Y-m-d H:i:s") . $user->passhash);
             db_query("UPDATE users SET passkey = " . sqlesc($passkey) . " WHERE id=" . sqlesc($user->id));
         }
-        $ip = IPTools::getIp();
-        $user->ip = $ip;
+//         $ip = IPTools::getIp();
+//         $user->ip = $ip;
         if ($user) {
             $di->set('current_user', $user);
         } else {
